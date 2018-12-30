@@ -48,8 +48,10 @@ script:
       make install DESTDIR=appdir;
       wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage";
       chmod a+x linuxdeployqt-continuous-x86_64.AppImage;
+      export VERSION=$(git rev-parse --short HEAD);
       ./linuxdeployqt-continuous-x86_64.AppImage ./appdir/usr/share/applications/mu-image.desktop -appimage;
-
+      wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh;
+      bash upload.sh mu-image*.AppImage*;
     fi
   - if [ $TRAVIS_OS_NAME = osx -a $CC = clang ]; then
       cmake . -DBUILD_OSX_BUNDLE=1 -DCMAKE_OSX_ARCHITECTURES="x86_64" -DQT_PREFIX=/usr/local/opt/qt5 -DCMAKE_INSTALL_PREFIX=~/.local;
